@@ -24,3 +24,7 @@ Route::get('/users/{id}/meows/create', function ($id) {
 
     return view('create_meow', ['id' => $id]);
 });
+
+Route::get('/meows', function () {
+    return view('meows');
+});

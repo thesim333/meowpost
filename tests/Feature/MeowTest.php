@@ -75,4 +75,16 @@ class MeowTest extends TestCase
 
         $response->assertStatus(403);
     }
+
+    /**
+     * GET /meows
+     * 
+     * @return void
+     */
+    public function test_get_meows()
+    {
+        $response = $this->get('/meows');
+
+        $response->assertStatus(200);
+    }
 }
