@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Meow;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,5 +27,8 @@ Route::get('/users/{id}/meows/create', function ($id) {
 });
 
 Route::get('/meows', function () {
-    return view('meows');
+    $meows = Meow::orderBy('created_at', 'desc')
+        ->take(20)
+        ->get();
+    return view('meows', ['data' => $meows]);
 });
