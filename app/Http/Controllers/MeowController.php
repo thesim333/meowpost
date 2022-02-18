@@ -24,7 +24,7 @@ class MeowController extends Controller
 
         $meow_id = Meow::create([
             'user_id' => $int_id,
-            'content' => $request->input('content'),
+            'content' => strip_tags($request->input('content')),
         ]);
 
         return response('success', 200);
