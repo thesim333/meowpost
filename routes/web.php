@@ -22,5 +22,5 @@ Route::get('/users/{id}/meows/create', function ($id) {
         return response('Unknown user id', 403);
     }
 
-    return view('create_meow');
+    return view('create_meow', ['id' => $id]);
 });

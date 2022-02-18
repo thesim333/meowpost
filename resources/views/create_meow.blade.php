@@ -6,7 +6,7 @@
 
 @section('content')
     <main>
-        <form>
+        <form method="POST" action="{{url("/users/$id/meows")}}">
             <div class="mb-3">
                 <label for="meow-content" class="form-label">New Meow</label>
                 <textarea id="meow-content" class="form-control" aria-label="New Meow" name="content"></textarea>
