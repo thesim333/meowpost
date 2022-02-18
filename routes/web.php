@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/users/{id}/meows/create', function () {
+Route::get('/users/{id}/meows/create', function ($id) {
+    if (is_numeric($id) != 1) {
+        return response('Unknown user id', 403);
+    }
+
     return view('create_meow');
 });

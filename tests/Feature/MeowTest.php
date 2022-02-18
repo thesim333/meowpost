@@ -52,6 +52,7 @@ class MeowTest extends TestCase
 
     /**
      * GET /users/{id}/meows/create
+     * Success
      *
      * @return void
      */
@@ -60,5 +61,18 @@ class MeowTest extends TestCase
         $response = $this->get('/users/123/meows/create');
 
         $response->assertStatus(200);
+    }
+
+    /**
+     * GET /users/{id}/meows/create
+     * Invalid id
+     *
+     * @return void
+     */
+    public function test_get_create_meow_invalid_id()
+    {
+        $response = $this->get('/users/1d23/meows/create');
+
+        $response->assertStatus(403);
     }
 }
