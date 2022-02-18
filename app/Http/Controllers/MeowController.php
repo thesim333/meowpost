@@ -16,8 +16,14 @@ class MeowController extends Controller
      */
     public function create(Request $request, $id)
     {
+        $int_id = intval($id, 10);
+
+        if (is_numeric($id) != 1) {
+            return response('Unknown user id', 403);
+        }
+
         $meow_id = Meow::create([
-            'user_id' => $id,
+            'user_id' => $int_id,
             'content' => $request->input('content'),
         ]);
 

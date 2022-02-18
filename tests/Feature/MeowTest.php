@@ -22,4 +22,18 @@ class MeowTest extends TestCase
         $response = $this->post('/users/123/meows/create', ['content' => $content]);
         $response->assertStatus(200);
     }
+
+    /**
+     * POST /users/{id}/meows/create.
+     * 403 - invalid user id
+     *
+     * @return void
+     */
+    public function test_post_create_meow_invalid_id()
+    {
+        $content =
+            'Meow Meow Meow Meow Meow... Meow';
+        $response = $this->post('/users/3djhz/meows/create', ['content' => $content]);
+        $response->assertStatus(403);
+    }
 }
