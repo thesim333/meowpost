@@ -49,4 +49,16 @@ class MeowTest extends TestCase
         $response = $this->post('/users/123/meows', ['content' => $content]);
         $response->assertStatus(200);
     }
+
+    /**
+     * GET /users/{id}/meows/create
+     *
+     * @return void
+     */
+    public function test_get_create_meow()
+    {
+        $response = $this->get('/users/123/meows/create');
+
+        $response->assertStatus(200);
+    }
 }
