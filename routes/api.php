@@ -14,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/users/{id}/meows/create', [MeowController::class, 'create']);
+Route::post('/users/{id}/meows', [MeowController::class, 'create']);
