@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MeowController;
 use App\Models\Meow;
 use Illuminate\Support\Facades\Route;
 
@@ -18,17 +19,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/users/{id}/meows/create', function ($id) {
-    if (is_numeric($id) != 1) {
-        return response('Unknown user id', 403);
-    }
+Route::get('/users/{id}/meows/create', [MeowController::class, 'getCreateView']);
 
-    return view('create_meow', ['id' => $id]);
-});
-
-Route::get('/meows', function () {
-    $meows = Meow::orderBy('created_at', 'desc')
-        ->take(20)
-        ->get();
-    return view('meows', ['data' => $meows]);
-});
+Route::get('/meows', [MeowController::class, 'getMeowsView']);

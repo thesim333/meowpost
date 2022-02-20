@@ -29,4 +29,21 @@ class MeowController extends Controller
 
         return response('success', 200);
     }
+
+    public function getCreateView($id)
+    {
+        if (is_numeric($id) != 1) {
+            return response('Unknown user id', 403);
+        }
+
+        return view('create_meow', ['id' => $id]);
+    }
+
+    public function getMeowsView()
+    {
+        $meows = Meow::orderBy('created_at', 'desc')
+            ->take(20)
+            ->get();
+        return view('meows', ['data' => $meows]);
+    }
 }
