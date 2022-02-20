@@ -16,10 +16,6 @@ class MeowController extends Controller
      */
     public function create(Request $request, $id)
     {
-        if (is_numeric($id) != 1) {
-            return response('Unknown user id', 403);
-        }
-
         $meow_id = Meow::create([
             'user_id' => intval($id, 10),
             'content' => strip_tags($request->input('content')),
@@ -30,10 +26,6 @@ class MeowController extends Controller
 
     public function getCreateView($id)
     {
-        if (is_numeric($id) != 1) {
-            return response('Unknown user id', 403);
-        }
-
         return view('create_meow', ['id' => $id]);
     }
 

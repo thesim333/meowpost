@@ -34,7 +34,7 @@ class MeowTest extends TestCase
         $content =
             'Meow Meow Meow Meow Meow... Meow';
         $response = $this->post('/users/3djhz/meows', ['content' => $content]);
-        $response->assertStatus(403);
+        $response->assertStatus(404);
     }
 
     /**
@@ -73,7 +73,7 @@ class MeowTest extends TestCase
     {
         $response = $this->get('/users/1d23/meows/create');
 
-        $response->assertStatus(403);
+        $response->assertStatus(404);
     }
 
     /**
