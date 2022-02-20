@@ -36,6 +36,7 @@
 
           if (response.ok) {
             successBox.hidden = false;
+            meowForm.reset();
           }
         }
     </script>
