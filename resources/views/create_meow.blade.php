@@ -9,7 +9,7 @@
         <form method="POST" action="{{url("/users/$id/meows")}}">
             <div class="mb-3">
                 <label for="meow-content" class="form-label">New Meow</label>
-                <textarea id="meow-content" class="form-control" aria-label="New Meow" name="content"></textarea>
+                <textarea id="meow-content" class="form-control" aria-label="New Meow" name="content" required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Meow!</button>
         </form>
