@@ -29,7 +29,7 @@
           const successBox = document.getElementById('meowFormSuccess');
           const errorBox = document.getElementById('meowFormError');
 
-          if (successBox.hidden) {
+          if (!successBox.hidden) {
             successBox.hidden = true;
           }
 
