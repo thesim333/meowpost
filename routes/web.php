@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\MeowController;
-use App\Models\Meow;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/users/{id}/meows/create', [MeowController::class, 'getCreateView']);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
-Route::get('/meows', [MeowController::class, 'getMeowsView']);
+require __DIR__.'/auth.php';
