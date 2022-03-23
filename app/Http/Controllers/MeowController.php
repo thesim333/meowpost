@@ -4,29 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Models\Meow;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class MeowController extends Controller
 {
+    /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Create a new Meow record.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request, $id)
+    public function create(Request $request)
     {
-        $meow_id = Meow::create([
-            'user_id' => intval($id, 10),
-            'content' => strip_tags($request->input('content')),
-        ]);
+        Auth::user()->createMeow($request->content);
 
-        return response('success', 200);
+        return response(200);
     }
 
-    public function getCreateView($id)
+    public function getCreateView()
     {
-        return view('create_meow', ['id' => $id]);
+        $full_name = Auth::user()->fullName;
+        return view('create_meow', ['name' => $full_name]);
     }
 
     public function getMeowsView()
@@ -35,5 +43,10 @@ class MeowController extends Controller
             ->take(20)
             ->get();
         return view('meows', ['data' => $meows]);
+    }
+
+    public function getUserMeowsView()
+    {
+        return view('my-meows', ['data' => Auth::user()->meows, 'name' => Auth::user()->fullName]);
     }
 }
