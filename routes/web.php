@@ -3,6 +3,8 @@
 use App\Http\Controllers\MeowController;
 use App\Models\Meow;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +31,15 @@ Route::get('/user/meows/create', [MeowController::class, 'getCreateView'])->name
 Route::get('/meows', [MeowController::class, 'getMeowsView'])->name('meows');
 Route::get('/user/my-meows', [MeowController::class, 'getUserMeowsView'])->name('myMeows');
 Route::post('/api/meows', [MeowController::class, 'create'])->name('makeMeow');
+Route::get('/user/terms', function () {
+    return view('terms-agree');
+})->middleware('auth');
+Route::post('/user/terms', function (Request $request) {
+    if ($request->agree == true) {
+        Auth::user()->agreed_terms = now();
+        Auth::user()->save();
+
+        return redirect('/meows');
+    }
+    return back();
+})->middleware('auth')->name('agreeTerms');
