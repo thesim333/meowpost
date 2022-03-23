@@ -9,7 +9,7 @@
         <p>Things written here that you have to agree to before using MeowPost.</p>
     </div>
     <div>
-        <form action="POST" action="{{ route('agreeTerms') }}">
+        <form method="POST" action="{{ route('agreeTerms') }}">
             @csrf
             <div class="block mt-4">
                 <label for="agree" class="inline-flex items-center">
@@ -17,6 +17,7 @@
                     <span class="ml-2 text-sm text-gray-600">{{ __('Agree') }}</span>
                 </label>
             </div>
+            <input type="hidden" name="intended" value="{{ session('intended') }}">
             <x-button class="ml-3">
                 {{ __('Go') }}
             </x-button>
