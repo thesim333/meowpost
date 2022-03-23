@@ -25,5 +25,7 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/users/{id}/meows/create', [MeowController::class, 'getCreateView']);
-Route::get('/users/{id}/meows/create', [MeowController::class, 'getCreateView']);
+Route::get('/user/meows/create', [MeowController::class, 'getCreateView'])->name('newMeow');
+Route::get('/meows', [MeowController::class, 'getMeowsView'])->name('meows');
+Route::get('/user/my-meows', [MeowController::class, 'getUserMeowsView'])->name('myMeows');
+Route::post('/api/meows', [MeowController::class, 'create'])->name('makeMeow');
