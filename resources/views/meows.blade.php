@@ -5,17 +5,11 @@
         </h1>
     </x-slot>
 
-<!-- @section('title', 'Latest Meows!') -->
-
-<!-- @section('heading', 'Latest Meows') -->
-
-<!-- @section('content') -->
     <x-slot name="slot">
-        <div>
+        <div class="px-4 py-4">
             @foreach ($data as $meow)
-                @include('meow', ['meow' => $meow])
+                @include('components.meow', ['meow' => $meow])
             @endforeach
         </div>
     </x-slot>
-<!-- @endsection -->
 </x-app-layout>

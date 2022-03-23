@@ -5,10 +5,10 @@
         </h1>
     </x-slot>
     <x-slot name="slot">
-    <div>
-        @foreach ($data as $meow)
-            @include('meow', ['meow' => $meow])
-        @endforeach
-    </div>
+        <div class="px-4 py-4">
+            @foreach ($data as $meow)
+                @include('components.meow', ['meow' => $meow])
+            @endforeach
+        </div>
     </x-slot>
 </x-app-layout>
