@@ -59,7 +59,7 @@ class User extends Authenticatable
      */
     public function meows()
     {
-        return $this->hasMany(Meow::class);
+        return $this->hasMany(Meow::class)->orderBy('created_at', 'desc');
     }
 
     /**
