@@ -28,7 +28,7 @@ class MeowController extends Controller
     {
         Auth::user()->createMeow($request->content);
 
-        return response(200);
+        return redirect('/user/my-meows');
     }
 
     public function getCreateView()
