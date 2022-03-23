@@ -1,53 +1,28 @@
-@extends('page')
+<x-app-layout>
+    <x-slot name="header">
+        <h1 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __("Hey $name, What do you want to Meow about today?") }}
+        </h1>
+    </x-slot>
 
-@section('title', 'Post New Meow')
-
-@section('heading', 'What do you want to Meow about today?')
-
-@section('content')
-    <main>
-        <form id="meowForm">
-            <div class="mb-3">
-                <label for="meow-content" class="form-label">New Meow</label>
-                <textarea id="meow-content" class="form-control" aria-label="New Meow" name="content" required></textarea>
+    <x-slot name="slot">
+        <div class="px-4 py-4">
+            <form method="POST" action="{{ route('makeMeow') }}">
+                @csrf
+                <div>
+                    <x-label for="meow-content" :value="__('New Meow')" />
+                    <x-textarea id="meow-content" name="content" required />
+                </div>
+                <x-button class="ml-3">
+                    {{ __('Meow!') }}
+                </x-button>
+            </form>
+            <div id="meowFormSuccess" class="alert alert-success mt-2" hidden>
+                <span>Meow Posted! 😺</span>
             </div>
-            <button type="submit" class="btn btn-primary">Meow!</button>
-        </form>
-        <div id="meowFormSuccess" class="alert alert-success mt-2" hidden>
-            <span>Meow Posted! 😺</span>
+            <div id="meowFormError" class="alert alert-warning mt-2" hidden>
+                <span>Meow Post Error!</span>
+            </div>
         </div>
-        <div id="meowFormError" class="alert alert-warning mt-2" hidden>
-            <span>Meow Post Error!</span>
-        </div>
-    </main>
-@endsection
-
-@section('scripts')
-    <script>
-        meowForm.onsubmit = async (event) => {
-          event.preventDefault();
-          const successBox = document.getElementById('meowFormSuccess');
-          const errorBox = document.getElementById('meowFormError');
-
-          if (!successBox.hidden) {
-            successBox.hidden = true;
-          }
-
-          if (!errorBox.hidden) {
-              errorBox.hidden = true;
-          }
-
-          let response = await fetch('/users/456/meows', {
-            method: 'POST',
-            body: new FormData(meowForm),
-          });
-
-          if (response.ok) {
-            successBox.hidden = false;
-            meowForm.reset();
-          } else {
-            errorBox.hidden = false;
-          }
-        }
-    </script>
-@endsection
+    </x-slot>
+</x-app-layout>
