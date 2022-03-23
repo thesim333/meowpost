@@ -53,4 +53,20 @@ class User extends Authenticatable
     {
         return "{$this->given_name} {$this->family_name}";
     }
+
+    /**
+     * Get the meows for the User.
+     */
+    public function meows()
+    {
+        return $this->hasMany(Meow::class);
+    }
+
+    /**
+     * Create new Meow for User.
+     */
+    public function createMeow($body)
+    {
+        $this->meows()->create(['content' => $body]);
+    }
 }
