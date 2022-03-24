@@ -41,7 +41,7 @@ class MeowController extends Controller
     {
         Auth::user()->createMeow($request->content);
 
-        return redirect('/user/my-meows');
+        return redirect()->route('myMeows');
     }
 
     /**
@@ -62,6 +62,8 @@ class MeowController extends Controller
      */
     public function showCurrentUser()
     {
-        return view('my-meows', ['data' => Auth::user()->meows, 'name' => Auth::user()->fullName]);
+        return view('my-meows', [
+            'data' => Auth::user()->meows, 'name' => Auth::user()->fullName
+        ]);
     }
 }

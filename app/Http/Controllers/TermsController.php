@@ -28,7 +28,7 @@ class TermsController extends Controller
                 return redirect(urldecode($request->intended));
             }
 
-            return redirect('/meows');
+            return redirect()->route('meows');
         }
         return back();
     }

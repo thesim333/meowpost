@@ -18,7 +18,7 @@ class EnsureAgreedTerms
     public function handle(Request $request, Closure $next)
     {
         if (!isset(Auth::user()->agreed_terms)) {
-            return redirect('/user/terms')->with(['intended' => $request->url()]);
+            return redirect()->route('terms')->with(['intended' => $request->url()]);
         }
 
         return $next($request);
