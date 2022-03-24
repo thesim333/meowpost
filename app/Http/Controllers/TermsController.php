@@ -33,18 +33,4 @@ class TermsController extends Controller
 
         return redirect()->route('meows');
     }
-
-    /**
-     * Get the post register / login redirect path.
-     *
-     * @return string
-     */
-    // public function redirectPath()
-    // {
-    //     if ($this->request->filled('redirect_url')) {
-    //         return $this->request->redirect_url;
-    //     }
-
-    //     return $this->redirectTo;
-    // }
 }
