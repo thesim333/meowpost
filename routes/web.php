@@ -25,9 +25,9 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/user/meows/create', [MeowController::class, 'getCreateView'])->name('newMeow');
-Route::get('/meows', [MeowController::class, 'getMeowsView'])->name('meows');
-Route::get('/user/my-meows', [MeowController::class, 'getUserMeowsView'])->name('myMeows');
-Route::post('/api/meows', [MeowController::class, 'create'])->name('makeMeow');
-Route::get('/user/terms', [TermsController::class, 'getTermsView'])->name('terms');
-Route::post('/user/terms', [TermsController::class, 'postTermsAcceptance'])->name('agreeTerms');
+Route::get('/user/meows/create', [MeowController::class, 'create'])->name('newMeow');
+Route::get('/meows', [MeowController::class, 'index'])->name('meows');
+Route::get('/user/my-meows', [MeowController::class, 'showCurrentUser'])->name('myMeows');
+Route::post('/api/meows', [MeowController::class, 'store'])->name('makeMeow');
+Route::get('/user/terms', [TermsController::class, 'index'])->name('terms');
+Route::post('/user/terms', [TermsController::class, 'store'])->name('agreeTerms');

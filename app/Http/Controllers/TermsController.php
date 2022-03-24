@@ -13,12 +13,12 @@ class TermsController extends Controller
         $this->middleware('auth');
     }
 
-    public function getTermsView()
+    public function index()
     {
         return view('terms-agree');
     }
 
-    public function postTermsAcceptance(Request $request, Response $response)
+    public function store(Request $request, Response $response)
     {
         if ($request->agree == true) {
             Auth::user()->agreed_terms = now();
@@ -38,12 +38,12 @@ class TermsController extends Controller
      *
      * @return string
      */
-    public function redirectPath()
-    {
-        if ($this->request->filled('redirect_url')) {
-            return $this->request->redirect_url;
-        }
+    // public function redirectPath()
+    // {
+    //     if ($this->request->filled('redirect_url')) {
+    //         return $this->request->redirect_url;
+    //     }
 
-        return $this->redirectTo;
-    }
+    //     return $this->redirectTo;
+    // }
 }

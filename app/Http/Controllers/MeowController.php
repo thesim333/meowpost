@@ -19,25 +19,11 @@ class MeowController extends Controller
     }
 
     /**
-     * Create a new Meow record.
+     * Display current 20 latest Meows page
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View
      */
-    public function create(Request $request)
-    {
-        Auth::user()->createMeow($request->content);
-
-        return redirect('/user/my-meows');
-    }
-
-    public function getCreateView()
-    {
-        $full_name = Auth::user()->fullName;
-        return view('create_meow', ['name' => $full_name]);
-    }
-
-    public function getMeowsView()
+    public function index()
     {
         $meows = Meow::orderBy('created_at', 'desc')
             ->take(20)
@@ -45,7 +31,36 @@ class MeowController extends Controller
         return view('meows', ['data' => $meows]);
     }
 
-    public function getUserMeowsView()
+    /**
+     * Create a new Meow record.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        Auth::user()->createMeow($request->content);
+
+        return redirect('/user/my-meows');
+    }
+
+    /**
+     * Create Meow Form View
+     *
+     * @return \Illuminate\Contracts\View
+     */
+    public function create()
+    {
+        $full_name = Auth::user()->fullName;
+        return view('create_meow', ['name' => $full_name]);
+    }
+
+    /**
+     * Display all Meows for the current User
+     *
+     * @return \Illuminate\Contracts\View
+     */
+    public function showCurrentUser()
     {
         return view('my-meows', ['data' => Auth::user()->meows, 'name' => Auth::user()->fullName]);
     }
