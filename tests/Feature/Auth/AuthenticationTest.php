@@ -18,9 +18,25 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_users_can_authenticate_using_the_login_screen()
+    public function test_users_can_authenticate_using_the_login_screen_redirect_not_agreed()
     {
         $user = User::factory()->create();
+
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+        $response->assertRedirect(RouteServiceProvider::HOME);
+        // Follow redirect
+        $nextResponse = $this->get(RouteServiceProvider::HOME);
+        $nextResponse->assertRedirect('/user/terms');
+    }
+
+    public function test_users_can_authenticate_using_the_login_screen()
+    {
+        $user = User::factory()->create(['agreed_terms' => now()]);
 
         $response = $this->post('/login', [
             'email' => $user->email,
