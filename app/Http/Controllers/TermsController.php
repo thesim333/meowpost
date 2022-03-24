@@ -20,17 +20,18 @@ class TermsController extends Controller
 
     public function store(Request $request, Response $response)
     {
-        if ($request->agree == true) {
-            Auth::user()->agreed_terms = now();
-            Auth::user()->save();
+        $request->validate([
+            'agree' => 'accepted',
+        ]);
 
-            if (isset($request->intended)) {
-                return redirect(urldecode($request->intended));
-            }
+        Auth::user()->agreed_terms = now();
+        Auth::user()->save();
 
-            return redirect()->route('meows');
+        if (isset($request->intended)) {
+            return redirect(urldecode($request->intended));
         }
-        return back();
+
+        return redirect()->route('meows');
     }
 
     /**
