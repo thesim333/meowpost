@@ -3,88 +3,127 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\User;
 use Tests\TestCase;
 
 class MeowTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
 
     /**
-     * POST /users/{id}/meows.
-     * Success
+     * Fails on not auth redirect to Login
+     * POST /api/meows
+     * Redirect
      *
      * @return void
      */
-    public function test_post_create_meow()
+    public function test_post_create_meow_non_auth()
     {
         $content = 'Meow Meow Meow Meow Meow... Meow';
-        $response = $this->post('/users/123/meows', ['content' => $content]);
-        $response->assertStatus(200);
+        $response = $this->post('/api/meows', ['content' => $content]);
+        $response->assertRedirect('/login');
     }
 
     /**
-     * POST /users/{id}/meows.
-     * 403 - invalid user id
+     * Will fail with redirect to terms if not agreed
+     * POST /api/meows
+     * Redirect
      *
      * @return void
      */
-    public function test_post_create_meow_invalid_id()
+    public function test_post_create_meow_not_agreed()
     {
-        $content =
-            'Meow Meow Meow Meow Meow... Meow';
-        $response = $this->post('/users/3djhz/meows', ['content' => $content]);
-        $response->assertStatus(404);
+        $user = User::factory()->create();
+        $content = 'Meow Meow Meow Meow Meow... Meow';
+        $response = $this->actingAs($user)
+            ->post('/api/meows', ['content' => $content]);
+        $response->assertRedirect('/user/terms');
     }
 
     /**
-     * POST /users/{id}/meows.
-     * test strip_tags - read db result
-     * 
+     * Can Post when auth and agreed
+     * POST /api/meows
+     * Redirect
+     *
      * @return void
      */
-    public function test_post_create_meow_strip()
+    public function test_post_create_meow_agreed()
     {
-        $content = '<script>alert("warning, you got scripted!");</script>';
-        $response = $this->post('/users/123/meows', ['content' => $content]);
-        $response->assertStatus(200);
+        $user = User::factory()->create(['agreed_terms' => now()]);
+        $content =
+            'Meow Meow Meow Meow Meow... Meow';
+        $response = $this->actingAs($user)
+            ->post('/api/meows', ['content' => $content]);
+        $response->assertRedirect('/user/my-meows');
     }
 
     /**
-     * GET /users/{id}/meows/create
+     * Redirects if not auth
+     * GET /users/meows/create
      * Success
+     *
+     * @return void
+     */
+    public function test_get_create_meow_not_auth()
+    {
+        $response = $this->get('/user/meows/create');
+        $response->assertRedirect('/login');
+    }
+
+    /**
+     * Redirects if not agreed to terms
+     * GET /users/meows/create
+     * Success
+     *
+     * @return void
+     */
+    public function test_get_create_meow_not_agreed()
+    {
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)
+            ->get('/user/meows/create');
+        $response->assertRedirect('/user/terms');
+    }
+
+    /**
+     * GET /users/meows/create
+     * 200
      *
      * @return void
      */
     public function test_get_create_meow()
     {
-        $response = $this->get('/users/123/meows/create');
-
+        $user = User::factory()->create(['agreed_terms' => now()]);
+        $response = $this->actingAs($user)
+            ->get('/user/meows/create');
         $response->assertStatus(200);
     }
 
     /**
-     * GET /users/{id}/meows/create
-     * Invalid id
-     *
-     * @return void
-     */
-    public function test_get_create_meow_invalid_id()
-    {
-        $response = $this->get('/users/1d23/meows/create');
-
-        $response->assertStatus(404);
-    }
-
-    /**
      * GET /meows
-     * 
+     * 200
+     *
      * @return void
      */
     public function test_get_meows()
     {
-        $response = $this->get('/meows');
+        $user = User::factory()->create(['agreed_terms' => now()]);
+        $response = $this->actingAs($user)
+            ->get('/meows');
+        $response->assertStatus(200);
+    }
 
+    /**
+     * GET /user/my-meows
+     * 200
+     *
+     * @return void
+     */
+    public function test_get_user_meows()
+    {
+        $user = User::factory()->create(['agreed_terms' => now()]);
+        $response = $this->actingAs($user)
+            ->get('/user/my-meows');
         $response->assertStatus(200);
     }
 }
