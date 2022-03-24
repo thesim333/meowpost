@@ -6,10 +6,6 @@
     </x-slot>
 
     <x-slot name="slot">
-        <div class="px-4 py-4">
-            @foreach ($data as $meow)
-                @include('components.meow', ['meow' => $meow])
-            @endforeach
-        </div>
+        <x-meows :data="$data" />
     </x-slot>
 </x-app-layout>
