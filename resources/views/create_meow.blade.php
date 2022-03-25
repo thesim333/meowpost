@@ -19,12 +19,6 @@
                     {{ __('Meow!') }}
                 </x-button>
             </form>
-            <div id="meowFormSuccess" class="alert alert-success mt-2" hidden>
-                <span>Meow Posted! 😺</span>
-            </div>
-            <div id="meowFormError" class="alert alert-warning mt-2" hidden>
-                <span>Meow Post Error!</span>
-            </div>
         </div>
     </x-slot>
 </x-app-layout>
