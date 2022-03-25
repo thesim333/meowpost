@@ -39,8 +39,11 @@ class MeowController extends Controller
      */
     public function store(Request $request)
     {
-        Auth::user()->createMeow($request->content);
+        $request->validate([
+            'content' => ['required', 'max:160', 'min:2'],
+        ]);
 
+        Auth::user()->createMeow($request->content);
         return redirect()->route('myMeows');
     }
 

@@ -58,6 +58,40 @@ class MeowTest extends TestCase
     }
 
     /**
+     * Test content too short
+     * POST /api/meows
+     * Redirect
+     *
+     * @return void
+     */
+    public function test_post_create_meow_too_short()
+    {
+        $user = User::factory()->create(['agreed_terms' => now()]);
+        $content = 'M';
+        $response = $this->actingAs($user)
+            ->post('/api/meows', ['content' => $content]);
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors(['content']);
+    }
+
+    /**
+     * Test content too short
+     * POST /api/meows
+     * Redirect
+     *
+     * @return void
+     */
+    public function test_post_create_meow_too_long()
+    {
+        $user = User::factory()->create(['agreed_terms' => now()]);
+        $content = str_repeat('M', 161);
+        $response = $this->actingAs($user)
+            ->post('/api/meows', ['content' => $content]);
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors(['content']);
+    }
+
+    /**
      * Redirects if not auth
      * GET /users/meows/create
      * Success
