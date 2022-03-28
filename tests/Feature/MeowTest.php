@@ -182,7 +182,7 @@ class MeowTest extends TestCase
     /**
      * User can update their meow
      * PUT /user/meow/{id}
-     * 200
+     * 302
      *
      * @return void
      */
@@ -203,7 +203,7 @@ class MeowTest extends TestCase
      * PUT /user/meow/{id}
      * 401
      */
-    public function test_cannot_update_another_user_meow()
+    public function test_update_meow_fails_not_owner()
     {
         $user1 = User::factory()->create(['agreed_terms' => now()]);
         $user1->createMeow('Meow Meow Meow ... Meow?');
@@ -226,6 +226,56 @@ class MeowTest extends TestCase
         $user = User::factory()->create(['agreed_terms' => now()]);
         $response = $this->actingAs($user)
             ->put("/user/meow/2", ['content' => 'Just 1 Meow.']);
+        $response->assertStatus(404);
+    }
+
+    /**
+     * DELETE /user/meow/{id}
+     * 302
+     *
+     * @return void
+     */
+    public function test_delete_meow()
+    {
+        $user = User::factory()->create(['agreed_terms' => now()]);
+        $user->createMeow('Meow Meow Meow ... Meow?');
+        $meow = $user->meows()->first();
+
+        $response = $this->actingAs($user)
+            ->delete("/user/meow/$meow->id");
+        $response->assertSessionHas('success', 'Meow Removed');
+    }
+
+    /**
+     * User cannot delete a Meow belonging to another User
+     * DELETE /user/meow/{id}
+     * 401
+     *
+     * @return void
+     */
+    public function test_delete_meow_fails_not_owner()
+    {
+        $user1 = User::factory()->create(['agreed_terms' => now()]);
+        $user1->createMeow('Meow Meow Meow ... Meow?');
+        $meow = $user1->meows()->first();
+
+        $user2 = User::factory()->create(['agreed_terms' => now()]);
+
+        $response = $this->actingAs($user2)
+            ->delete("/user/meow/$meow->id");
+        $response->assertStatus(401);
+    }
+
+    /**
+     * Cannot delete meow that doesn't exist
+     * DELETE /user/meow/{id}
+     * 404
+     */
+    public function test_delete_meow_id_not_found_404()
+    {
+        $user = User::factory()->create(['agreed_terms' => now()]);
+        $response = $this->actingAs($user)
+            ->delete("/user/meow/1");
         $response->assertStatus(404);
     }
 }

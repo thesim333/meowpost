@@ -30,6 +30,23 @@ class MeowController extends Controller
     }
 
     /**
+     * Delete Meow
+     */
+    public function delete(Request $request, $id)
+    {
+        $meow = Meow::whereId($id)->first();
+
+        if (isset($meow) && $meow->user->id == Auth::id()) {
+            $meow->delete();
+            return redirect()->back()->with('success', 'Meow Removed');
+        } elseif (!isset($meow)) {
+            return response('Meow does not exist', 404);
+        }
+
+        return response('That is not your meow', 401);
+    }
+
+    /**
      * Display view to edit Meow with {id}
      *
      * @return \Illuminate\Contracts\View

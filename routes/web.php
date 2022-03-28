@@ -31,6 +31,7 @@ Route::get('/user/my-meows', [MeowController::class, 'showCurrentUser'])->name('
 Route::post('/api/meows', [MeowController::class, 'store'])->name('makeMeow');
 Route::get('/user/meow/{id}', [MeowController::class, 'edit'])->name('editMeow');
 Route::put('/user/meow/{id}', [MeowController::class, 'update'])->name('updateMeow');
+Route::delete('/user/meow/{id}', [MeowController::class, 'delete'])->name('deleteMeow');
 
 Route::get('/user/terms', [TermsController::class, 'index'])->name('terms');
 Route::post('/user/terms', [TermsController::class, 'store'])->name('agreeTerms');
