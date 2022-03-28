@@ -19,35 +19,6 @@ class MeowController extends Controller
     }
 
     /**
-     * Display current 20 latest Meows page
-     *
-     * @return \Illuminate\Contracts\View
-     */
-    public function index()
-    {
-        $meows = Meow::orderBy('created_at', 'desc')
-            ->take(20)
-            ->get();
-        return view('meows', ['data' => $meows]);
-    }
-
-    /**
-     * Create a new Meow record.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'content' => ['required', 'max:160', 'min:2'],
-        ]);
-
-        Auth::user()->createMeow($request->content);
-        return redirect()->route('myMeows');
-    }
-
-    /**
      * Create Meow Form View
      *
      * @return \Illuminate\Contracts\View
@@ -75,6 +46,19 @@ class MeowController extends Controller
     }
 
     /**
+     * Display current 20 latest Meows page
+     *
+     * @return \Illuminate\Contracts\View
+     */
+    public function index()
+    {
+        $meows = Meow::orderBy('created_at', 'desc')
+            ->take(20)
+            ->get();
+        return view('meows', ['data' => $meows]);
+    }
+
+    /**
      * Display all Meows for the current User
      *
      * @return \Illuminate\Contracts\View
@@ -85,6 +69,22 @@ class MeowController extends Controller
             'data' => Auth::user()->meows,
             'name' => Auth::user()->fullName
         ]);
+    }
+
+    /**
+     * Create a new Meow record.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'content' => ['required', 'max:160', 'min:2'],
+        ]);
+
+        Auth::user()->createMeow($request->content);
+        return redirect()->route('myMeows');
     }
 
     public function update(Request $request, $id)
@@ -99,6 +99,8 @@ class MeowController extends Controller
             $meow->content = $request->content;
             $meow->save();
             return redirect()->back()->with('success', 'Meow Updated');
+        } elseif (!isset($meow)) {
+            return response('Meow does not exist', 404);
         }
 
         return response('That is not your meow', 401);

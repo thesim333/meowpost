@@ -181,7 +181,7 @@ class MeowTest extends TestCase
 
     /**
      * User can update their meow
-     * PUT /user/my-meow/{id}
+     * PUT /user/meow/{id}
      * 200
      *
      * @return void
@@ -200,7 +200,7 @@ class MeowTest extends TestCase
 
     /**
      * User cannot update a Meow belonging to another User
-     * PUT /user/my-meow/{id}
+     * PUT /user/meow/{id}
      * 401
      */
     public function test_cannot_update_another_user_meow()
@@ -214,5 +214,18 @@ class MeowTest extends TestCase
         $response = $this->actingAs($user2)
             ->put("/user/meow/$meow->id", ['content' => 'Just 1 Meow.']);
         $response->assertStatus(401);
+    }
+
+    /**
+     * Cannot update meow that doesn't exist
+     * PUT /user/meow/id
+     * 404
+     */
+    public function test_update_id_not_found_404()
+    {
+        $user = User::factory()->create(['agreed_terms' => now()]);
+        $response = $this->actingAs($user)
+            ->put("/user/meow/2", ['content' => 'Just 1 Meow.']);
+        $response->assertStatus(404);
     }
 }
