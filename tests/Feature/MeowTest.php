@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Meow;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Tests\TestCase;
@@ -159,5 +160,59 @@ class MeowTest extends TestCase
         $response = $this->actingAs($user)
             ->get('/user/my-meows');
         $response->assertStatus(200);
+    }
+
+    /**
+     * GET /user/my-meow/{id}
+     * 200
+     *
+     * @return void
+     */
+    public function test_get_created_meow_for_edit()
+    {
+        $user = User::factory()->create(['agreed_terms' => now()]);
+        $user->createMeow('Meow Meow Meow ... Meow?');
+        $meow = $user->meows()->first();
+
+        $response = $this->actingAs($user)
+            ->get("/user/meow/$meow->id");
+        $response->assertStatus(200);
+    }
+
+    /**
+     * User can update their meow
+     * PUT /user/my-meow/{id}
+     * 200
+     *
+     * @return void
+     */
+    public function test_update_meow()
+    {
+        $user = User::factory()->create(['agreed_terms' => now()]);
+        $user->createMeow('Meow Meow Meow ... Meow?');
+        $meow = $user->meows()->first();
+
+
+        $response = $this->actingAs($user)
+            ->put("/user/meow/$meow->id", ['content' => 'Just 1 Meow.']);
+        $response->assertSessionHas('success', 'Meow Updated');
+    }
+
+    /**
+     * User cannot update a Meow belonging to another User
+     * PUT /user/my-meow/{id}
+     * 401
+     */
+    public function test_cannot_update_another_user_meow()
+    {
+        $user1 = User::factory()->create(['agreed_terms' => now()]);
+        $user1->createMeow('Meow Meow Meow ... Meow?');
+        $meow = $user1->meows()->first();
+
+        $user2 = User::factory()->create(['agreed_terms' => now()]);
+
+        $response = $this->actingAs($user2)
+            ->put("/user/meow/$meow->id", ['content' => 'Just 1 Meow.']);
+        $response->assertStatus(401);
     }
 }

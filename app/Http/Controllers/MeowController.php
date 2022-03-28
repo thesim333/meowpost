@@ -59,6 +59,22 @@ class MeowController extends Controller
     }
 
     /**
+     * Display view to edit Meow with {id}
+     *
+     * @return \Illuminate\Contracts\View
+     */
+    public function edit($id)
+    {
+        $meow = Meow::whereId($id)->first();
+
+        if (!isset($meow)) {
+            return response('Meow does not exist', 404);
+        }
+
+        return view('single-meow', ['meow' => $meow]);
+    }
+
+    /**
      * Display all Meows for the current User
      *
      * @return \Illuminate\Contracts\View
@@ -66,7 +82,25 @@ class MeowController extends Controller
     public function showCurrentUser()
     {
         return view('my-meows', [
-            'data' => Auth::user()->meows, 'name' => Auth::user()->fullName
+            'data' => Auth::user()->meows,
+            'name' => Auth::user()->fullName
         ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'content' => ['required', 'max:160', 'min:2'],
+        ]);
+
+        $meow = Meow::whereId($id)->first();
+
+        if (isset($meow) && $meow->user->id == Auth::id()) {
+            $meow->content = $request->content;
+            $meow->save();
+            return redirect()->back()->with('success', 'Meow Updated');
+        }
+
+        return response('That is not your meow', 401);
     }
 }
