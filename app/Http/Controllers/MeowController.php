@@ -38,7 +38,7 @@ class MeowController extends Controller
 
         if (isset($meow) && $meow->user->id == Auth::id()) {
             $meow->delete();
-            return redirect()->back()->with('success', 'Meow Removed');
+            return response('deleted', 200);
         } elseif (!isset($meow)) {
             return response('Meow does not exist', 404);
         }

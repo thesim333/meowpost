@@ -243,7 +243,7 @@ class MeowTest extends TestCase
 
         $response = $this->actingAs($user)
             ->delete("/user/meow/$meow->id");
-        $response->assertSessionHas('success', 'Meow Removed');
+        $response->assertStatus(200);
     }
 
     /**
