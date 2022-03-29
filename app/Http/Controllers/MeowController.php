@@ -130,23 +130,4 @@ class MeowController extends Controller
 
         return response('That is not your meow', 401);
     }
-
-    /**
-     * Undocumented function
-     *
-     * @param string[] $tags
-     * @return Tag[]
-     */
-    private function handleTags($tags)
-    {
-        return array_map(function ($tag) {
-            $resTag = Tag::where('tag', $tag)->get;
-
-            if (isset($resTag)) {
-                return $resTag;
-            }
-
-            return new Tag(['tag' => $tag]);
-        }, $tags);
-    }
 }
