@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Meow;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -98,9 +99,16 @@ class MeowController extends Controller
     {
         $request->validate([
             'content' => ['required', 'max:160', 'min:2'],
+            'tags.*' => ['string', 'min:1', 'max:30'],
         ]);
+        $meow = Meow::create(['content' => $request->content, 'user_id' => Auth::id()]);
 
-        Auth::user()->createMeow($request->content);
+        $tagIds = array_map(function ($tag) {
+            $tagM = Tag::firstOrCreate(['tag' => $tag]);
+            return $tagM->id;
+        }, $request->tags);
+
+        $meow->tags()->sync($tagIds);
         return redirect()->route('myMeows');
     }
 
@@ -121,5 +129,24 @@ class MeowController extends Controller
         }
 
         return response('That is not your meow', 401);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param string[] $tags
+     * @return Tag[]
+     */
+    private function handleTags($tags)
+    {
+        return array_map(function ($tag) {
+            $resTag = Tag::where('tag', $tag)->get;
+
+            if (isset($resTag)) {
+                return $resTag;
+            }
+
+            return new Tag(['tag' => $tag]);
+        }, $tags);
     }
 }

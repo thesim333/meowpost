@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Models\Meow;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use App\Models\Tag;
 use Tests\TestCase;
 
 class MeowTest extends TestCase
@@ -51,10 +51,12 @@ class MeowTest extends TestCase
     public function test_post_create_meow_agreed()
     {
         $user = User::factory()->create(['agreed_terms' => now()]);
+        $tag = Tag::factory()->create(['tag' => 'General']);
         $content =
             'Meow Meow Meow Meow Meow... Meow';
+        $tags = ['General', "What's up"];
         $response = $this->actingAs($user)
-            ->post('/api/meows', ['content' => $content]);
+            ->post('/api/meows', ['content' => $content, 'tags' => $tags]);
         $response->assertRedirect('/user/my-meows');
     }
 
@@ -225,7 +227,7 @@ class MeowTest extends TestCase
     {
         $user = User::factory()->create(['agreed_terms' => now()]);
         $response = $this->actingAs($user)
-            ->put("/user/meow/2", ['content' => 'Just 1 Meow.']);
+            ->put("/user/meow/2000", ['content' => 'Just 1 Meow.']);
         $response->assertStatus(404);
     }
 
@@ -275,7 +277,7 @@ class MeowTest extends TestCase
     {
         $user = User::factory()->create(['agreed_terms' => now()]);
         $response = $this->actingAs($user)
-            ->delete("/user/meow/1");
+            ->delete("/user/meow/1000");
         $response->assertStatus(404);
     }
 }

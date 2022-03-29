@@ -23,12 +23,14 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Meow whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Meow whereUserId($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
+ * @property-read int|null $tags_count
  */
 class Meow extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['content'];
+    protected $fillable = ['content', 'user_id'];
 
     /**
      * Get the User who owns this Meow
@@ -36,5 +38,15 @@ class Meow extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * All tags associated with Meow
+     *
+     * @return Tag[]
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
     }
 }
