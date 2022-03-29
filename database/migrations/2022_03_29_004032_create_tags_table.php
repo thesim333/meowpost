@@ -12,16 +12,16 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('meowtags', function (Blueprint $table) {
+        Schema::create('tags', function (Blueprint $table) {
             $table->id();
             $table->string('tag');
             $table->timestamps();
         });
 
-        Schema::create('meow_meowtag', function (Blueprint $table) {
+        Schema::create('meow_tag', function (Blueprint $table) {
             $table->foreignId('meow_id')->constrained();
-            $table->foreignId('meowtag_id')->constrained();
-            $table->primary(['meow_id', 'meowtag_id']);
+            $table->foreignId('tag_id')->constrained();
+            $table->primary(['meow_id', 'tag_id']);
         });
     }
 
