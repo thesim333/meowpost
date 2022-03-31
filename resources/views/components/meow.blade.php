@@ -15,7 +15,6 @@
 </div>
 <script>
     async function deleteMeow() {
-        console.log("{{ route('deleteMeow', $meow->id) }}", "{{ csrf_token() }}");
         await fetch("{{ route('deleteMeow', $meow->id) }}", {
             method: 'DELETE',
             headers: {
@@ -25,3 +24,21 @@
         window.location.replace("{{ route('meows') }}");
     }
 </script>
+<style>
+    .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+    }
+    .card-body {
+        flex: 1 1 auto;
+        padding: 1.25rem;
+        position: relative;
+    }
+</style>
