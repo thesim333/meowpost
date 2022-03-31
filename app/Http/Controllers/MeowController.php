@@ -62,7 +62,8 @@ class MeowController extends Controller
             return response('Meow does not exist', 404);
         }
 
-        return view('single-meow', ['meow' => $meow]);
+        $tags = Tag::select('tag')->get();
+        return view('single-meow', ['meow' => $meow, 'tags' => $tags]);
     }
 
     /**
@@ -111,13 +112,14 @@ class MeowController extends Controller
         }, $request->tags);
 
         $meow->tags()->sync($tagIds);
-        return redirect()->route('myMeows');
+        return response('success');
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'content' => ['required', 'max:160', 'min:2'],
+            'tags.*' => ['string', 'min:1', 'max:30'],
         ]);
 
         $meow = Meow::whereId($id)->first();
@@ -125,7 +127,14 @@ class MeowController extends Controller
         if (isset($meow) && $meow->user->id == Auth::id()) {
             $meow->content = $request->content;
             $meow->save();
-            return redirect()->back()->with('success', 'Meow Updated');
+
+            $tagIds = array_map(function ($tag) {
+                $tagM = Tag::firstOrCreate(['tag' => $tag]);
+                return $tagM->id;
+            }, $request->tags);
+
+            $meow->tags()->sync($tagIds);
+            return response('success');
         } elseif (!isset($meow)) {
             return response('Meow does not exist', 404);
         }

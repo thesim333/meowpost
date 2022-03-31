@@ -5,38 +5,35 @@ import Label from '@/Components/Label';
 import { registerComponentToDom } from '@/utils';
 import axios from 'axios';
 
-export function MeowForm ({ tags = [] }) {
+export function MeowForm ({ tags = [], meow, meowtags }) {
   const [success, setSuccess] = useState(null);
   const { register, handleSubmit, control } = useForm({
     defaultValues: {
-      content: '',
-      tags: []
+      content: meow.content || '',
+      tags:
+        (meowtags && meowtags.map(t => ({ value: t.tag, label: t.tag }))) || []
     }
   });
 
   function onSubmit ({ content, tags }) {
     setSuccess(null);
 
-    axios
-      .post('/user/meows', {
+    axios(`/user/meow${meow ? `/${meow.id}` : 's'}`, {
+      method: meow ? 'PUT' : 'POST',
+      data: {
         content,
         tags: tags.map(t => t.value),
         _token: document.querySelector('meta[name="csrf-token"]').content
-      })
-      .then(res => {
-        setSuccess('You have Meowed...');
-        window.location.assign('/user/meows');
-      });
-  }
-
-  function handleChange (newValue, actionMeta) {
-    setData('tags', newValue);
+      }
+    }).then(res => {
+      setSuccess('You have Meowed...');
+    });
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>
-        <Label forInput='meow-content' value='Mew Meow' />
+        <Label forInput='meow-content' value='New Meow' />
         <textarea
           className='rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full'
           id='meow-content'
