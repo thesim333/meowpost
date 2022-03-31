@@ -73,10 +73,11 @@ class MeowController extends Controller
      */
     public function index()
     {
+        $tags = Tag::withCount('meows')->orderBy('meows_count', 'desc')->get();
         $meows = Meow::orderBy('created_at', 'desc')
             ->take(20)
             ->get();
-        return view('meows', ['data' => $meows]);
+        return view('meows', ['data' => $meows, 'tags' => $tags]);
     }
 
     /**

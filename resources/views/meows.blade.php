@@ -6,6 +6,7 @@
     </x-slot>
 
     <x-slot name="slot">
+        <x-tag-links :tags="$tags" />
         <x-meows :data="$data" />
     </x-slot>
 </x-app-layout>
