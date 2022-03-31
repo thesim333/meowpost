@@ -7,6 +7,9 @@
             </div>
         @endif
         <p>{{ $meow->content }}</p>
+        <div class="flex mt-4">
+            @each('components.tag', $meow->tags, 'tag')
+        </div>
     </div>
     <div class="flex px-3 justify-between items-baseline">
         <h6>User: {{ $meow->user->fullName }}</h6>
@@ -40,5 +43,9 @@
         flex: 1 1 auto;
         padding: 1.25rem;
         position: relative;
+    }
+    .bg-blue-600 {
+        --tw-bg-opacity: 1;
+        background-color: rgb(37 99 235 / var(--tw-bg-opacity));
     }
 </style>
