@@ -27,7 +27,9 @@ class MeowController extends Controller
     public function create()
     {
         $full_name = Auth::user()->fullName;
-        return view('create_meow', ['name' => $full_name]);
+        $tags = Tag::all();
+        $full_name = Auth::user()->fullName;
+        return view('create_meow', ['name' => $full_name, 'tags' => $tags]);
     }
 
     /**

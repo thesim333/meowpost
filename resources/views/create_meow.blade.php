@@ -9,16 +9,8 @@
         <div class="px-4 py-4">
             <!-- Validation Errors -->
             <x-auth-validation-errors class="mb-4" :errors="$errors" />
-            <form method="POST" action="{{ route('makeMeow') }}">
-                @csrf
-                <div>
-                    <x-label for="meow-content" :value="__('New Meow')" />
-                    <x-textarea id="meow-content" name="content" required />
-                </div>
-                <x-button class="ml-3">
-                    {{ __('Meow!') }}
-                </x-button>
-            </form>
+            <div id="meow-form" data-tags="{{ $tags }}"></div>
         </div>
     </x-slot>
 </x-app-layout>
+<script src="/js/meow-form.js"></script>

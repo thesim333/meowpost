@@ -11,8 +11,15 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js').postCss('resources/css/app.css', 'public/css', [
+mix
+  .js('resources/js/app.js', 'public/js')
+  .postCss('resources/css/app.css', 'public/css', [
     require('postcss-import'),
     require('tailwindcss'),
-    require('autoprefixer'),
-]);
+    require('autoprefixer')
+  ])
+  .js('resources/js/Components/MeowForm.js', 'public/js/meow-form.js')
+  .react()
+  .alias({
+    '@': 'resources/js'
+  });
