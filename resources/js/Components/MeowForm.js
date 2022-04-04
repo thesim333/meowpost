@@ -9,7 +9,7 @@ export function MeowForm ({ tags = [], meow, meowtags }) {
   const [success, setSuccess] = useState(null);
   const { register, handleSubmit, control } = useForm({
     defaultValues: {
-      content: meow.content || '',
+      content: meow?.content || '',
       tags:
         (meowtags && meowtags.map(t => ({ value: t.tag, label: t.tag }))) || []
     }

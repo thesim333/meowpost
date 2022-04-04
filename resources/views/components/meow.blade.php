@@ -1,9 +1,10 @@
 <div class="card">
     <div class="card-body">
-        @if (Auth::id() == $meow->user->id)
+        @if (Auth::id() == $meow->user_id)
             <div class="px-3 py-3 absolute right-0 top-0 flex">
                 <a href="{{ route('editMeow', $meow->id) }}">{{ __('Edit') }}</a>
-                <button href="{{ route('deleteMeow', $meow->id) }}" class="ml-2" onclick="deleteMeow()">{{ __('Remove') }}</a>
+                <button href="{{ route('deleteMeow', $meow->id) }}" class="ml-2"
+                    onclick="deleteMeow()">{{ __('Remove') }}</a>
             </div>
         @endif
         <p>{{ $meow->content }}</p>
@@ -15,6 +16,7 @@
         <h6>User: {{ $meow->user->fullName }}</h6>
         <span>{{ $meow->created_at->diffForHumans() }}</span>
     </div>
+    {{-- {{ var_dump($meow) }} --}}
 </div>
 <script>
     async function deleteMeow() {
@@ -39,13 +41,16 @@
         border: 1px solid rgba(0, 0, 0, 0.125);
         border-radius: 0.25rem;
     }
+
     .card-body {
         flex: 1 1 auto;
         padding: 1.25rem;
         position: relative;
     }
+
     .bg-blue-600 {
         --tw-bg-opacity: 1;
         background-color: rgb(37 99 235 / var(--tw-bg-opacity));
     }
+
 </style>

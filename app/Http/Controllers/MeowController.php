@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Meow;
 use App\Models\Tag;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -75,19 +74,8 @@ class MeowController extends Controller
      */
     public function index(Request $request)
     {
-        $query_tag = $request->query('tag');
         $tags = Tag::withCount('meows')->orderBy('meows_count', 'desc')->get();
-
-        $meows = Meow::when($query_tag, function ($query, $tag) {
-            $query->whereHas('tags', function (Builder $q) use ($tag) {
-                $q->where('tag', '=', $tag);
-            });
-        })
-            ->orderBy('created_at', 'desc')
-            ->take(20)
-            ->get();
-
-        return view('meows', ['data' => $meows, 'tags' => $tags]);
+        return view('meows', ['tags' => $tags]);
     }
 
     /**
