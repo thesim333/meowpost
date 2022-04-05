@@ -7,7 +7,7 @@
 
     <x-slot name="slot">
         <x-tag-links :tags="$tags" />
-        @livewire('meows')
+        @livewire('meows-incremental')
         @livewireScripts
     </x-slot>
 </x-app-layout>
