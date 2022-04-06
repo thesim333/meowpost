@@ -1,10 +1,10 @@
-<div class="container p-4 mx-auto">
+<div id="incremental" class="container p-4 mx-auto" data-page="{{ $page }}" data-more="{{ $more }}">
     @foreach ($meows as $meow)
+        <span>{{ $loop->index }}</span>
         <x-meow :meow="$meow" />
     @endforeach
 </div>
-{{ $more }}
-@if ($meows->hasMorePages())
+<div id="removableScripts">
     <button wire:click.prevent="loadMore">Load more</button>
     <div id="intersection" x-data="{
         checkScroll() {
@@ -16,4 +16,4 @@
             }
         }
     }" x-init="checkScroll"></div>
-@endif
+</div>

@@ -10,10 +10,11 @@ use Livewire\WithPagination;
 class MeowsIncremental extends Component
 {
     use WithPagination;
-    public $page = 1;
+    public $pageN;
     public $perPage;
     public $tag;
-    protected $queryString = ['page', 'tag'];
+    protected $queryString = ['pageN', 'tag'];
+    public $more = true;
 
     /**
      * lifecycle hook runs once
@@ -23,12 +24,15 @@ class MeowsIncremental extends Component
      */
     public function mount($perPage = null)
     {
+        $this->page = $this->pageN ?? 1;
         $this->perPage = $perPage ?? 20;
     }
 
     public function loadMore()
     {
-        $this->page += 1;
+        if ($this->more) {
+            $this->pageN += 1;
+        }
     }
 
     protected $listeners = [
@@ -56,8 +60,10 @@ class MeowsIncremental extends Component
         })
             ->with(['user', 'tags'])
             ->latest()
-            ->paginate($this->page * $this->perPage);
+            ->paginate($this->pageN * $this->perPage);
 
-        return view('livewire.meows-incremental', ['meows' => $meows, 'more' => $meows->hasMorePages()]);
+        $this->more = $meows->hasMorePages();
+
+        return view('livewire.meows-incremental', ['meows' => $meows]);
     }
 }
